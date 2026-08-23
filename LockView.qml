@@ -141,11 +141,22 @@ Item {
           height: width
           radius: width / 2
           color: "#E8E8E8"
+          clip: true
           border.width: 1
           border.color: Qt.rgba(1, 1, 1, 0.36)
+          Image {
+            id: avatarImage
+            anchors.fill: parent
+            source: "file://" + Quickshell.env("HOME") + "/.face"
+            fillMode: Image.PreserveAspectCrop
+            asynchronous: true
+            sourceSize.width: parent.width * 2
+            sourceSize.height: parent.height * 2
+          }
           Text {
             anchors.centerIn: parent
             text: root.userName.charAt(0).toUpperCase()
+            visible: avatarImage.status !== Image.Ready
             color: "#303030"
             font.family: Style.font.family
             font.pixelSize: 22
