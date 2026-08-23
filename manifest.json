@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.pulkitchauhan.botanical-lock",
+  "name": "Botanical Lock",
+  "version": "0.1.0",
+  "author": "Pulkit Chauhan",
+  "license": "MIT",
+  "description": "A wallpaper-first Omarchy lock screen with a translucent botanical glass panel.",
+  "kinds": ["service"],
+  "keepLoaded": true,
+  "entryPoints": {
+    "service": "Service.qml"
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.lock"
+  }
+}
