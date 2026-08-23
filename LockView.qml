@@ -119,8 +119,54 @@ Item {
       anchors.right: parent.right
       anchors.bottom: parent.bottom
       width: root.panelWidth
-      color: "#101010"
-      opacity: 0.56
+      color: "transparent"
+
+      // Re-render the matching part of the wallpaper here, then blur it. This
+      // creates a frosted-glass surface instead of a dark opaque sidebar.
+      Item {
+        anchors.fill: parent
+        clip: true
+
+        Image {
+          id: panelWallpaper
+          x: -panel.x
+          y: -panel.y
+          width: root.width
+          height: root.height
+          source: root.loadBackground ? root.fileUrl(root.backgroundPath) : ""
+          fillMode: Image.PreserveAspectCrop
+          asynchronous: true
+          cache: false
+          visible: false
+          sourceSize.width: width
+          sourceSize.height: height
+        }
+
+        MultiEffect {
+          x: -panel.x
+          y: -panel.y
+          width: root.width
+          height: root.height
+          source: panelWallpaper
+          autoPaddingEnabled: false
+          blurEnabled: root.loadBackground && panelWallpaper.status === Image.Ready
+          blur: 0.72
+          blurMax: 96
+          blurMultiplier: 1.15
+          contrast: -0.05
+          brightness: -0.08
+        }
+      }
+
+      // Neutral highlight and shade: readable contents without tinting the glass.
+      Rectangle {
+        anchors.fill: parent
+        color: Qt.rgba(1, 1, 1, 0.10)
+      }
+      Rectangle {
+        anchors.fill: parent
+        color: Qt.rgba(0, 0, 0, 0.14)
+      }
 
       Rectangle {
         anchors.left: parent.left
