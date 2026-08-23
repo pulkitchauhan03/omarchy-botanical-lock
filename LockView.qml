@@ -141,9 +141,18 @@ Item {
           height: width
           radius: width / 2
           color: "#E8E8E8"
-          clip: true
           border.width: 1
           border.color: Qt.rgba(1, 1, 1, 0.36)
+
+          Rectangle {
+            id: avatarMask
+            anchors.fill: parent
+            radius: width / 2
+            color: "white"
+            visible: false
+            layer.enabled: true
+          }
+
           Image {
             id: avatarImage
             anchors.fill: parent
@@ -152,6 +161,14 @@ Item {
             asynchronous: true
             sourceSize.width: parent.width * 2
             sourceSize.height: parent.height * 2
+            layer.enabled: true
+            layer.smooth: true
+            layer.effect: MultiEffect {
+              maskEnabled: true
+              maskSource: avatarMask
+              maskThresholdMin: 0.3
+              maskSpreadAtMin: 0.3
+            }
           }
           Text {
             anchors.centerIn: parent
