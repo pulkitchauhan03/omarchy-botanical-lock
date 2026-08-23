@@ -161,11 +161,11 @@ Item {
       // Neutral highlight and shade: readable contents without tinting the glass.
       Rectangle {
         anchors.fill: parent
-        color: Qt.rgba(1, 1, 1, 0.10)
+        color: Qt.rgba(1, 1, 1, 0.07)
       }
       Rectangle {
         anchors.fill: parent
-        color: Qt.rgba(0, 0, 0, 0.14)
+        color: Qt.rgba(0, 0, 0, 0.10)
       }
 
       Rectangle {
