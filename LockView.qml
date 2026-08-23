@@ -119,20 +119,15 @@ Item {
       anchors.right: parent.right
       anchors.bottom: parent.bottom
       width: root.panelWidth
-      color: "#08130B"
-      opacity: 0.76
-
-      gradient: Gradient {
-        GradientStop { position: 0.0; color: "#071208" }
-        GradientStop { position: 1.0; color: "#102518" }
-      }
+      color: "#101010"
+      opacity: 0.56
 
       Rectangle {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         width: 1
-        color: Qt.rgba(0.75, 0.88, 0.69, 0.16)
+        color: Qt.rgba(1, 1, 1, 0.16)
       }
 
       Column {
@@ -145,13 +140,13 @@ Item {
           width: 54
           height: width
           radius: width / 2
-          color: "#B9D9CA"
+          color: "#E8E8E8"
           border.width: 1
-          border.color: Qt.rgba(0.90, 0.97, 0.87, 0.38)
+          border.color: Qt.rgba(1, 1, 1, 0.36)
           Text {
             anchors.centerIn: parent
             text: root.userName.charAt(0).toUpperCase()
-            color: "#183120"
+            color: "#303030"
             font.family: Style.font.family
             font.pixelSize: 22
             font.weight: Font.DemiBold
@@ -184,7 +179,7 @@ Item {
           radius: 8
           color: Qt.rgba(0.03, 0.08, 0.04, 0.54)
           border.width: root.errorState ? 2 : 1
-          border.color: root.errorState ? Color.lock.textError : (passwordInput.activeFocus ? "#B9D9CA" : Qt.rgba(0.83, 0.91, 0.78, 0.46))
+          border.color: root.errorState ? Color.lock.textError : (passwordInput.activeFocus ? "#F1F1F1" : Qt.rgba(1, 1, 1, 0.40))
 
           TextInput {
             id: passwordInput
@@ -240,7 +235,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             visible: root.fingerprintConfigured
             text: "󰈷"
-            color: Qt.rgba(0.73, 0.85, 0.67, 0.75)
+            color: Qt.rgba(1, 1, 1, 0.68)
             font.family: Style.font.family
             font.pixelSize: 20
           }
@@ -251,7 +246,7 @@ Item {
           visible: root.fingerprintConfigured
           text: "Fingerprint available"
           horizontalAlignment: Text.AlignHCenter
-          color: Qt.rgba(0.73, 0.85, 0.67, 0.60)
+          color: Qt.rgba(1, 1, 1, 0.56)
           font.family: Style.font.family
           font.pixelSize: Style.font.caption
         }

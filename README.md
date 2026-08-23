@@ -1,6 +1,6 @@
 # Botanical Lock
 
-A wallpaper-first lock screen for Omarchy 4. Your active Omarchy wallpaper fills the screen; a translucent botanical-green panel on the right contains the authentication UI.
+A wallpaper-first lock screen for Omarchy 4. Your active Omarchy wallpaper fills the screen; a neutral translucent glass panel on the right contains the authentication UI.
 
 ## Features
 
