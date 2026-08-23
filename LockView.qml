@@ -100,7 +100,7 @@ Item {
         text: Qt.formatTime(root.now, "HH:mm")
         color: "#F1E8D4"
         font.family: Style.font.family
-        font.pixelSize: Math.max(54, Math.round(parent.parent.height * 0.10))
+        font.pixelSize: Math.max(60, Math.round(parent.parent.height * 0.115))
         font.weight: Font.DemiBold
         font.letterSpacing: -2
       }
@@ -108,7 +108,7 @@ Item {
         text: Qt.formatDate(root.now, "dddd, d MMMM")
         color: Qt.rgba(0.94, 0.91, 0.82, 0.78)
         font.family: Style.font.family
-        font.pixelSize: Style.font.subtitle
+        font.pixelSize: Math.round(Style.font.subtitle * 1.2)
         font.letterSpacing: 1.2
       }
     }
@@ -163,7 +163,7 @@ Item {
         }
         Text {
           anchors.horizontalCenter: parent.horizontalCenter
-          text: root.userName
+          text: root.userName.toUpperCase()
           color: "#F1E8D4"
           font.family: Style.font.family
           font.pixelSize: Style.font.heading
