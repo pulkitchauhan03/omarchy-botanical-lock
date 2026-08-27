@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Effects
+import QtMultimedia
 import Quickshell
 import qs.Commons
 import qs.Ui
@@ -9,6 +10,8 @@ Item {
 
   property string backgroundPath: ""
   property int backgroundVersion: 0
+  property string liveVideoPath: ""
+  property int liveVideoVersion: 0
   property bool fingerprintConfigured: false
   property bool authenticatingPassword: false
   property string failureMessage: ""
@@ -26,6 +29,8 @@ Item {
   readonly property int fieldFontSize: Math.round(Style.font.heading * 1.05)
   readonly property bool errorState: failureMessage.length > 0
   readonly property bool showCursor: inputEnabled && !authenticatingPassword && !errorState
+  readonly property bool hasLiveVideo: loadBackground && liveVideoPath.length > 0
+  readonly property bool liveVideoPlaying: wallpaperPlayer.playbackState === MediaPlayer.PlayingState
 
   signal submitPassword(string password)
   signal passwordTextEdited(string password)
@@ -36,6 +41,11 @@ Item {
     if (!path) return ""
     var encoded = String(path).split("/").map(encodeURIComponent).join("/")
     return "file://" + encoded + "?v=" + backgroundVersion
+  }
+
+  function mediaUrl(path) {
+    if (!path) return ""
+    return "file://" + String(path).split("/").map(encodeURIComponent).join("/")
   }
 
   function forcePasswordFocus() { passwordInput.forceActiveFocus() }
@@ -68,6 +78,7 @@ Item {
       id: wallpaper
       anchors.fill: parent
       source: root.loadBackground ? root.fileUrl(root.backgroundPath) : ""
+      visible: !root.hasLiveVideo
       fillMode: Image.PreserveAspectCrop
       asynchronous: true
       cache: false
@@ -75,11 +86,26 @@ Item {
       sourceSize.height: height
     }
 
+    MediaPlayer {
+      id: wallpaperPlayer
+      source: root.hasLiveVideo ? root.mediaUrl(root.liveVideoPath) : ""
+      videoOutput: videoWallpaper
+      loops: MediaPlayer.Infinite
+      autoPlay: root.hasLiveVideo
+    }
+
+    VideoOutput {
+      id: videoWallpaper
+      anchors.fill: parent
+      visible: root.hasLiveVideo
+      fillMode: VideoOutput.PreserveAspectCrop
+    }
+
     // A restrained wash preserves the wallpaper rather than turning it into a blur.
     Rectangle {
       anchors.fill: parent
       color: "#071008"
-      opacity: wallpaper.status === Image.Ready ? 0.18 : 0
+      opacity: root.hasLiveVideo || wallpaper.status === Image.Ready ? 0.18 : 0
     }
 
     MouseArea {
@@ -147,9 +173,9 @@ Item {
           y: -panel.y
           width: root.width
           height: root.height
-          source: panelWallpaper
+          source: root.hasLiveVideo ? videoWallpaper : panelWallpaper
           autoPaddingEnabled: false
-          blurEnabled: root.loadBackground && panelWallpaper.status === Image.Ready
+          blurEnabled: root.loadBackground && (root.hasLiveVideo || panelWallpaper.status === Image.Ready)
           blur: 0.72
           blurMax: 96
           blurMultiplier: 1.15

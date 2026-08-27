@@ -15,6 +15,7 @@ Item {
   readonly property string stateHome: home + "/.local/state"
   readonly property string userName: Quickshell.env("USER") || Quickshell.env("LOGNAME")
   readonly property string currentBackgroundLink: stateHome + "/omarchy/current/background"
+  readonly property string motionBackgroundState: stateHome + "/motion-backgrounds/current.json"
 
   property bool lockRequested: false
   property bool pendingSessionLock: false
@@ -29,6 +30,8 @@ Item {
   property int failedAttempts: 0
   property string backgroundPath: ""
   property int backgroundVersion: 0
+  property string liveVideoPath: ""
+  property int liveVideoVersion: 0
   property string lastEvent: "init"
   property string lastEventAt: ""
   property bool strandedLock: false
@@ -101,6 +104,22 @@ Item {
 
   function refreshBackground() {
     if (!readlinkProc.running) readlinkProc.running = true
+  }
+
+  function loadMotionBackground(contents) {
+    var next = ""
+
+    try {
+      var state = JSON.parse(String(contents || ""))
+      if (state && typeof state.path === "string") next = state.path
+    } catch (error) {
+      next = ""
+    }
+
+    if (next !== liveVideoPath) {
+      liveVideoPath = next
+      liveVideoVersion += 1
+    }
   }
 
   function refreshFingerprintStatus() {
@@ -270,6 +289,8 @@ Item {
         anchors.fill: parent
         backgroundPath: root.backgroundPath
         backgroundVersion: root.backgroundVersion
+        liveVideoPath: root.liveVideoPath
+        liveVideoVersion: root.liveVideoVersion
         fingerprintConfigured: root.fingerprintConfigured
         authenticatingPassword: root.authenticatingPassword
         failureMessage: root.failureMessage
@@ -297,9 +318,12 @@ Item {
     exclusionMode: ExclusionMode.Ignore
 
     LockView {
+      id: previewView
       anchors.fill: parent
       backgroundPath: root.backgroundPath
       backgroundVersion: root.backgroundVersion
+      liveVideoPath: root.liveVideoPath
+      liveVideoVersion: root.liveVideoVersion
       fingerprintConfigured: root.fingerprintConfigured
       authenticatingPassword: false
       failureMessage: ""
@@ -482,6 +506,16 @@ Item {
   }
 
   FileView {
+    id: motionBackgroundFile
+    path: root.motionBackgroundState
+    watchChanges: true
+    printErrors: false
+    onLoaded: root.loadMotionBackground(text())
+    onFileChanged: reload()
+    onLoadFailed: root.loadMotionBackground("")
+  }
+
+  FileView {
     path: "/etc/pam.d/omarchy-lock-password"
     watchChanges: true
     printErrors: false
@@ -531,6 +565,9 @@ Item {
         passwordPam: root.passwordPamConfigured,
         fingerprint: root.fingerprintConfigured,
         authenticating: root.authenticating,
+        previewVisible: root.previewVisible,
+        liveVideoPath: root.liveVideoPath,
+        previewVideoPlaying: previewView.liveVideoPlaying,
         lastEvent: root.lastEvent,
         lastEventAt: root.lastEventAt
       })

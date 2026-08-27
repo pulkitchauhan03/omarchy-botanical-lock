@@ -5,6 +5,7 @@ A wallpaper-first lock screen for Omarchy 4. Your active Omarchy wallpaper fills
 ## Features
 
 - Uses the current Omarchy wallpaper; the plugin does not ship or select a background.
+- Plays the active Motion Backgrounds video directly inside the secure lock surface.
 - Large clock and date on the wallpaper.
 - Translucent right-side authentication panel with a `~/.face` profile image, monogram fallback, greeting, password field, and fingerprint indicator.
 - Retains Omarchy's stock PAM and Wayland session-lock service.
