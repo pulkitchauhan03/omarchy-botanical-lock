@@ -32,6 +32,7 @@ Item {
   property int backgroundVersion: 0
   property string liveVideoPath: ""
   property int liveVideoVersion: 0
+  property bool motionBackgroundLoaded: false
   property string lastEvent: "init"
   property string lastEventAt: ""
   property bool strandedLock: false
@@ -510,9 +511,25 @@ Item {
     path: root.motionBackgroundState
     watchChanges: true
     printErrors: false
-    onLoaded: root.loadMotionBackground(text())
+    onLoaded: {
+      root.motionBackgroundLoaded = true
+      root.loadMotionBackground(text())
+    }
     onFileChanged: reload()
-    onLoadFailed: root.loadMotionBackground("")
+    onLoadFailed: {
+      root.motionBackgroundLoaded = false
+      root.loadMotionBackground("")
+    }
+  }
+
+  // FileView cannot always establish a watch when the state file does not yet
+  // exist. Retry only while it is absent so a video selected after plugin
+  // startup becomes available to the lock screen without restarting the shell.
+  Timer {
+    interval: 1000
+    repeat: true
+    running: !root.motionBackgroundLoaded
+    onTriggered: motionBackgroundFile.reload()
   }
 
   FileView {

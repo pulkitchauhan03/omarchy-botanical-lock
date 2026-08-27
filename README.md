@@ -55,6 +55,11 @@ Motion Backgrounds records its active video in:
 
 Botanical Lock watches this file and decodes the selected video with Qt Multimedia inside each secure lock surface. Playback loops silently only while the lock screen is visible. Selecting a static wallpaper clears the video state and restores the normal image path automatically.
 
+The state file may not exist when the shell first loads, especially on a fresh
+Motion Backgrounds installation. Botanical Lock retries the missing file and
+picks it up as soon as the first video is activated; restarting the Omarchy
+shell is not required.
+
 This design does not expose the unlocked desktop's `mpvpaper` surface above the lock screen.
 
 ## Preview and diagnostics
