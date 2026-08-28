@@ -62,7 +62,8 @@ Motion Backgrounds installation. Botanical Lock retries the missing file and
 picks it up as soon as the first video is activated; restarting the Omarchy
 shell is not required.
 
-This design does not expose the unlocked desktop's `mpvpaper` surface above the lock screen.
+This design renders the video independently inside the secure lock surface; it
+does not expose the unlocked desktop's wallpaper surface above the lock screen.
 
 ## Preview and diagnostics
 
