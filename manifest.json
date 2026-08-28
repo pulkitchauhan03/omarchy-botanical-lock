@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "io.github.pulkitchauhan.botanical-lock",
   "name": "Botanical Lock",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "Pulkit Chauhan",
   "license": "MIT",
   "description": "A wallpaper-first Omarchy lock screen with a translucent botanical glass panel.",

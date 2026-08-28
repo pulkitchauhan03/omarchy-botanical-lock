@@ -16,6 +16,8 @@ Item {
   readonly property string userName: Quickshell.env("USER") || Quickshell.env("LOGNAME")
   readonly property string currentBackgroundLink: stateHome + "/omarchy/current/background"
   readonly property string motionBackgroundState: stateHome + "/motion-backgrounds/current.json"
+  readonly property var idleService: shell ? shell.firstPartyServiceFor("omarchy.idle") : null
+  readonly property bool stayAwake: idleService ? idleService.stayAwake : false
 
   property bool lockRequested: false
   property bool pendingSessionLock: false
@@ -180,6 +182,9 @@ Item {
   }
 
   function armBlankTimer() {
+    idleBlankTimer.stop()
+    if (stayAwake) return
+
     idleBlankTimer.armedAt = Date.now()
     idleBlankTimer.restart()
   }
@@ -190,6 +195,7 @@ Item {
   }
 
   function runBlank() {
+    if (stayAwake) return
     if (!blankProcess.running) blankProcess.running = true
   }
 
@@ -452,7 +458,7 @@ Item {
       // Only a password check in flight should hold the display up. The
       // fingerprint PAM stays armed for the whole lock, so gating on
       // `authenticating` here would keep the panel lit until unlock.
-      if (root.lockRequested && !root.authenticatingPassword) root.runBlank()
+      if (root.lockRequested && !root.stayAwake && !root.authenticatingPassword) root.runBlank()
     }
   }
 
@@ -504,6 +510,17 @@ Item {
     if (!lockRequested) return
     if (authenticatingPassword) idleBlankTimer.stop()
     else armBlankTimer()
+  }
+
+  onStayAwakeChanged: {
+    logEvent("stay-awake=" + stayAwake)
+
+    if (stayAwake) {
+      idleBlankTimer.stop()
+      if (lockRequested) runWake()
+    } else if (lockRequested) {
+      armBlankTimer()
+    }
   }
 
   FileView {
@@ -582,6 +599,8 @@ Item {
         passwordPam: root.passwordPamConfigured,
         fingerprint: root.fingerprintConfigured,
         authenticating: root.authenticating,
+        stayAwake: root.stayAwake,
+        blankTimerRunning: idleBlankTimer.running,
         previewVisible: root.previewVisible,
         liveVideoPath: root.liveVideoPath,
         previewVideoPlaying: previewView.liveVideoPlaying,

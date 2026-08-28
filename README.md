@@ -14,6 +14,8 @@ Botanical Lock is a wallpaper-first secure lock screen for Omarchy 4. The active
 - Native `ext-session-lock-v1` Wayland session security.
 - Multi-monitor lock surfaces.
 - Display blanking one minute after locking, with suspend/resume handling.
+- Honors Omarchy's coffee-button Stay Awake mode, keeping locked displays awake
+  until Stay Awake is turned off.
 
 ## Requirements
 
